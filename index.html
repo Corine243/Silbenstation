@@ -1,62 +1,112 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Silbenstation</title>
-    <style>
-        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
-        .carousel { display: flex; justify-content: center; align-items: center; }
-        .word { font-size: 24px; margin: 20px; display: none; }
-        .buttons { margin-top: 20px; }
-        button { font-size: 16px; margin: 5px; padding: 10px 20px; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Wörter hören und schreiben</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 30px;
+    }
+
+    .button-large {
+      font-size: 20px;
+      padding: 15px 30px;
+      margin: 10px;
+    }
+
+    .button-small {
+      font-size: 16px;
+      padding: 10px 20px;
+      margin: 5px;
+    }
+
+    #wordDisplay {
+      margin-top: 15px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .nav-buttons {
+      margin-top: 30px;
+    }
+
+    .nav-buttons button {
+      font-size: 24px;
+      padding: 10px 20px;
+      margin: 0 10px;
+    }
+  </style>
 </head>
 <body>
-    <h1>Silbenstation</h1>
-    <div class="carousel">
-        <button onclick="prevWord()">⬅️</button>
-        <div id="wordDisplay" class="word">Wort</div>
-        <button onclick="nextWord()">➡️</button>
-    </div>
-    <div class="buttons">
-        <button onclick="playAudio()">Wort anhören</button>
-        <button onclick="showWord()">Wort anzeigen</button>
-    </div>
 
-    <audio id="audioPlayer" src=""></audio>
+  <!-- Großer Button: Wort anhören -->
+  <button id="listenBtn" class="button-large" onclick="playAudio()">🔊 Wort 1 anhören</button><br/>
 
-    <script>
-        const words = [
-            { text: "dunkel", audio: "dunkel.mp3" },
-            { text: "singen", audio: "singen.mp3" },
-            { text: "spielen", audio: "spielen.mp3" },
-            { text: "rechnen", audio: "rechnen.mp3" },
-            { text: "tafel", audio: "tafel.mp3" },
-            { text: "zeigen", audio: "zeigen.mp3" }
-        ];
-        
-        let currentIndex = 0;
+  <!-- Kleiner Button: Wort anzeigen -->
+  <button id="showBtn" class="button-small" onclick="showWord()">👁 Wort 1 anzeigen</button>
 
-        function showWord() {
-            document.getElementById('wordDisplay').innerText = words[currentIndex].text;
-        }
+  <!-- Wortanzeige -->
+  <div id="wordDisplay"></div>
 
-        function playAudio() {
-            const audioPlayer = document.getElementById('audioPlayer');
-            audioPlayer.src = words[currentIndex].audio;
-            audioPlayer.play();
-        }
+  <!-- Navigation: Zurück / Weiter -->
+  <div class="nav-buttons">
+    <button onclick="prevWord()">⬅️</button>
+    <button onclick="nextWord()">➡️</button>
+  </div>
 
-        function nextWord() {
-            currentIndex = (currentIndex + 1) % words.length;
-            document.getElementById('wordDisplay').innerText = "Wort";
-        }
+  <!-- Audioelement -->
+  <audio id="audioPlayer" src=""></audio>
 
-        function prevWord() {
-            currentIndex = (currentIndex - 1 + words.length) % words.length;
-            document.getElementById('wordDisplay').innerText = "Wort";
-        }
-    </script>
+  <script>
+    // 👉 Hier kannst du deine Wörter & zugehörige Audiodateien einfügen:
+    const words = [
+      { text: "dunkel", audio: "dunkel.mp3" },
+      { text: "singen", audio: "singen.mp3" },
+      { text: "spielen", audio: "spielen.mp3" },
+      { text: "rechnen", audio: "rechnen.mp3" },
+      { text: "Tafel", audio: "tafel.mp3" },
+      { text: "zeigen", audio: "zeigen.mp3" }
+      // 👉 Wenn du weitere Wörter hast, einfach hier ergänzen
+    ];
+
+    let currentIndex = 0;
+
+    // Funktion zum Abspielen der Audiodatei
+    function playAudio() {
+      const audioPlayer = document.getElementById("audioPlayer");
+      audioPlayer.src = words[currentIndex].audio;
+      audioPlayer.play();
+    }
+
+    // Funktion zur Anzeige des Wortes
+    function showWord() {
+      document.getElementById("wordDisplay").innerText = words[currentIndex].text;
+    }
+
+    // Funktion zum Anzeigen des aktuellen Buttons mit passender Nummer
+    function updateButtons() {
+      document.getElementById("listenBtn").innerText = `🔊 Wort ${currentIndex + 1} anhören`;
+      document.getElementById("showBtn").innerText = `👁 Wort ${currentIndex + 1} anzeigen`;
+      document.getElementById("wordDisplay").innerText = ""; // Anzeige löschen bei Wechsel
+    }
+
+    // Navigation: Vorheriges Wort
+    function prevWord() {
+      currentIndex = (currentIndex - 1 + words.length) % words.length;
+      updateButtons();
+    }
+
+    // Navigation: Nächstes Wort
+    function nextWord() {
+      currentIndex = (currentIndex + 1) % words.length;
+      updateButtons();
+    }
+
+    // Initiale Anzeige
+    updateButtons();
+  </script>
 </body>
 </html>
