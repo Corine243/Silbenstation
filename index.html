@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Silbenstation</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+        .carousel { display: flex; justify-content: center; align-items: center; }
+        .word { font-size: 24px; margin: 20px; display: none; }
+        .buttons { margin-top: 20px; }
+        button { font-size: 16px; margin: 5px; padding: 10px 20px; }
+    </style>
+</head>
+<body>
+    <h1>Silbenstation</h1>
+    <div class="carousel">
+        <button onclick="prevWord()">⬅️</button>
+        <div id="wordDisplay" class="word">Wort</div>
+        <button onclick="nextWord()">➡️</button>
+    </div>
+    <div class="buttons">
+        <button onclick="playAudio()">Wort anhören</button>
+        <button onclick="showWord()">Wort anzeigen</button>
+    </div>
+
+    <audio id="audioPlayer" src=""></audio>
+
+    <script>
+        const words = [
+            { text: "dunkel", audio: "dunkel.mp3" },
+            { text: "singen", audio: "singen.mp3" },
+            { text: "spielen", audio: "spielen.mp3" },
+            { text: "rechnen", audio: "rechnen.mp3" },
+            { text: "tafel", audio: "tafel.mp3" },
+            { text: "zeigen", audio: "zeigen.mp3" }
+        ];
+        
+        let currentIndex = 0;
+
+        function showWord() {
+            document.getElementById('wordDisplay').innerText = words[currentIndex].text;
+        }
+
+        function playAudio() {
+            const audioPlayer = document.getElementById('audioPlayer');
+            audioPlayer.src = words[currentIndex].audio;
+            audioPlayer.play();
+        }
+
+        function nextWord() {
+            currentIndex = (currentIndex + 1) % words.length;
+            document.getElementById('wordDisplay').innerText = "Wort";
+        }
+
+        function prevWord() {
+            currentIndex = (currentIndex - 1 + words.length) % words.length;
+            document.getElementById('wordDisplay').innerText = "Wort";
+        }
+    </script>
+</body>
+</html>
