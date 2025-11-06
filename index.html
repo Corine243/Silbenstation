@@ -3,12 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Wörter hören und schreiben</title>
+  <title>Silbenstation</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       text-align: center;
       padding: 30px;
+    }
+
+    .hidden {
+      display: none;
     }
 
     .button-large {
@@ -42,26 +46,31 @@
 </head>
 <body>
 
-  <!-- Großer Button: Wort anhören -->
-  <button id="listenBtn" class="button-large" onclick="playAudio()">🔊 Wort 1 anhören</button><br/>
-
-  <!-- Kleiner Button: Wort anzeigen -->
-  <button id="showBtn" class="button-small" onclick="showWord()">👁 Wort 1 anzeigen</button>
-
-  <!-- Wortanzeige -->
-  <div id="wordDisplay"></div>
-
-  <!-- Navigation: Zurück / Weiter -->
-  <div class="nav-buttons">
-    <button onclick="prevWord()">⬅️</button>
-    <button onclick="nextWord()">➡️</button>
+  <!-- 🟠 STARTSEITE mit Erklärung -->
+  <div id="startScreen">
+    <h2>Willkommen!</h2>
+    <p>Hier kannst du Wörter anhören und üben. Klicke auf den Button und höre dir zuerst die Erklärung an.</p>
+    <audio id="introAudio" src="erklaerung.mp3"></audio>
+    <button class="button-large" onclick="document.getElementById('introAudio').play()">🔊 Erklärung anhören</button><br/>
+    <button class="button-small" onclick="showMainContent()">✅ Ich bin startbereit</button>
   </div>
 
-  <!-- Audioelement -->
-  <audio id="audioPlayer" src=""></audio>
+  <!-- 🟢 HAUPTINHALT – erst sichtbar nach Start -->
+  <div id="mainScreen" class="hidden">
+    <button id="listenBtn" class="button-large" onclick="playAudio()">🔊 Wort 1 anhören</button><br/>
+    <button id="showBtn" class="button-small" onclick="showWord()">👁 Wort 1 anzeigen</button>
+    <div id="wordDisplay"></div>
+
+    <div class="nav-buttons">
+      <button onclick="prevWord()">⬅️</button>
+      <button onclick="nextWord()">➡️</button>
+    </div>
+
+    <audio id="audioPlayer" src=""></audio>
+  </div>
 
   <script>
-    // 👉 Hier kannst du deine Wörter & zugehörige Audiodateien einfügen:
+    // 👉 Wörter & Audios definieren
     const words = [
       { text: "dunkel", audio: "dunkel.mp3" },
       { text: "singen", audio: "singen.mp3" },
@@ -69,43 +78,43 @@
       { text: "rechnen", audio: "rechnen.mp3" },
       { text: "Tafel", audio: "tafel.mp3" },
       { text: "zeigen", audio: "zeigen.mp3" }
-      // 👉 Wenn du weitere Wörter hast, einfach hier ergänzen
     ];
 
     let currentIndex = 0;
 
-    // Funktion zum Abspielen der Audiodatei
     function playAudio() {
       const audioPlayer = document.getElementById("audioPlayer");
       audioPlayer.src = words[currentIndex].audio;
       audioPlayer.play();
     }
 
-    // Funktion zur Anzeige des Wortes
     function showWord() {
       document.getElementById("wordDisplay").innerText = words[currentIndex].text;
     }
 
-    // Funktion zum Anzeigen des aktuellen Buttons mit passender Nummer
     function updateButtons() {
       document.getElementById("listenBtn").innerText = `🔊 Wort ${currentIndex + 1} anhören`;
       document.getElementById("showBtn").innerText = `👁 Wort ${currentIndex + 1} anzeigen`;
-      document.getElementById("wordDisplay").innerText = ""; // Anzeige löschen bei Wechsel
+      document.getElementById("wordDisplay").innerText = "";
     }
 
-    // Navigation: Vorheriges Wort
     function prevWord() {
       currentIndex = (currentIndex - 1 + words.length) % words.length;
       updateButtons();
     }
 
-    // Navigation: Nächstes Wort
     function nextWord() {
       currentIndex = (currentIndex + 1) % words.length;
       updateButtons();
     }
 
-    // Initiale Anzeige
+    function showMainContent() {
+      document.getElementById("startScreen").classList.add("hidden");
+      document.getElementById("mainScreen").classList.remove("hidden");
+      updateButtons();
+    }
+
+    // Start: Buttons initialisieren
     updateButtons();
   </script>
 </body>
